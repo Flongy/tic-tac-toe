@@ -1,10 +1,6 @@
 # Default ignored files
-/.gitignore
-/vcs.xml
-/tic-tac-toe3.iml
 /workspace.xml
 /modules.xml
 /misc.xml
 /$CACHE_FILE$
 /inspectionProfiles/profiles_settings.xml
-./
