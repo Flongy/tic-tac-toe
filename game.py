@@ -1,8 +1,9 @@
 from tictactoe import Game, Message
-from agents import QAgent, RAgent
+from agents import QAgent, RAgent, UAgent
 
 
 def train(players, size, in_a_row, agents, episodes):
+    """ Сыграть несколько партий с agents """
     env = Game(players, size, in_a_row)
 
     wins = [0] * players
@@ -41,12 +42,17 @@ def train(players, size, in_a_row, agents, episodes):
                 print(f"\tНичьих: {draws}")
 
             if episode % 20_000 == 0 and (Message.WINMESSAGE in msgs or Message.DRAWMESSAGE in msgs):
+                if Message.DRAWMESSAGE in msgs:
+                    print(Message.DRAWMESSAGE[1])
+                else:
+                    print(f"Игрок №{msgs.index(Message.WINMESSAGE)} выиграл")
                 print(env.game_map)
 
-            if episode % 100_000 == 0 and episode:
+            if episode % 200_000 == 0 and episode:
                 for j, ag in enumerate(agents):
-                    # ag.dump(f"dumps/Player{j}-{players}-{size[0]}x{size[1]}-{in_a_row}-{episode}eps-{int(time.time())}.pickle")
-                    ag.dump(f"dumps/Player{j}-{players}-{size[0]}x{size[1]}-{in_a_row}-last.pickle")
+                    # ag.save(f"dumps/Player{j}-{players}-{size[0]}x{size[1]}-{in_a_row}-{episode}eps-{int(time.time())}.pickle")
+                    ag.save(f"dumps/Player{j}-{players}-{size[0]}x{size[1]}-{in_a_row}-last.pickle")
+                print("Q-таблицы сохранены")
 
 
 if __name__ == "__main__":
@@ -54,13 +60,16 @@ if __name__ == "__main__":
     players = 2
     size = (4, 4)
     in_a_row = 4
+    episodes = 1_000_000
 
     # Компьютеры, участвующие в игре
     # agents = [QAgent(size) for _ in range(players)]
-    # agents = [RAgent(size), QAgent(size)]
-    # agents = [QAgent.load("dumps/name.pickle", size, False),
-    #           QAgent.load("dumps/name.pickle", size, False)]
-    agents = [RAgent(size), QAgent.load("dumps/Player1-2-4x4-4-last.pickle", size, False)]
+    # agents = [RAgent(size), QAgent(size, episodes=episodes)]
+    # agents = [QAgent.load("dumps/Player0-2-4x4-4-last.pickle", size, False),
+    #           QAgent.load("dumps/Player1-2-4x4-4-last.pickle", size, False)]
+    # agents = [RAgent(size), QAgent.load("dumps/Player1-2-4x4-4-last.pickle", size, True, episodes)]
+    # agents = [QAgent.load("dumps/Player0-2-4x4-4-last.pickle", size, False), RAgent(size)]
+    agents = [RAgent(size), UAgent(size)]
 
     # Запуск цикла тренировки
-    train(players, size, in_a_row, agents, 1_000_000)
+    train(players, size, in_a_row, agents, episodes)

@@ -207,19 +207,3 @@ class Game:
         self.current_player += 1
         if self.current_player >= self.players:
             self.current_player = 0
-
-
-if __name__ == "__main__":
-    env = Game(2, (3, 3))
-    print(env.game_map)
-    print(env.action(0))
-    print(env.action(1))
-    print(env.action(2))
-    print(env.action(3))
-    print(env.action(4))
-    print(env.action(8))
-    print(env.action(7))
-    print(env.action(6))
-    print(env.action(5))
-    print(env.action(4))
-    print(env.game_map)
